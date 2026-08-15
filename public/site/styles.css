@@ -5016,3 +5016,17 @@ body.lightbox-open {
     font-size: 18px;
   }
 }
+
+/* Hero heading typography: heavy editorial weight (Part 2). */
+.hero h1 {
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+@media (max-width: 760px) {
+  .hero h1 {
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+}
