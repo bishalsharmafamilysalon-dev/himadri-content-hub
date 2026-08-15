@@ -12,7 +12,7 @@ type GhConfig = {
 };
 
 export function ghConfig(): GhConfig {
-  const token = process.env["GITHUB_TOKEN"];
+  const token = ghToken();
   const owner = process.env["GITHUB_OWNER"];
   const repo = process.env["GITHUB_REPO"];
   const branch = process.env["GITHUB_BRANCH"] || "main";
@@ -22,10 +22,15 @@ export function ghConfig(): GhConfig {
   return { token, owner, repo, branch };
 }
 
-export function isGithubConfigured(): boolean {
-  return Boolean(
-    process.env["GITHUB_TOKEN"] && process.env["GITHUB_OWNER"] && process.env["GITHUB_REPO"],
+/** Reads the fine-grained PAT from either supported secret name. Never returned to clients. */
+function ghToken(): string | undefined {
+  return (
+    process.env["GITHUB_TOKEN"] || process.env["GITHUB_FINE_GRAINED_PERSONAL_ACCESS_TOKEN"]
   );
+}
+
+export function isGithubConfigured(): boolean {
+  return Boolean(ghToken() && process.env["GITHUB_OWNER"] && process.env["GITHUB_REPO"]);
 }
 
 async function gh(path: string, init: RequestInit = {}): Promise<Response> {
